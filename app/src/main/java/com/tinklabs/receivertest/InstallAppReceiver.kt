@@ -11,7 +11,7 @@ import android.widget.Toast
  */
 class InstallAppReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("HandyDebug","receiver launcher broadcast")
+        Log.e("HandyDebug","receiver launcher broadcast")
         Toast.makeText(context, "test app receiverd the launcher broadcast", Toast.LENGTH_SHORT).show()
     }
 }

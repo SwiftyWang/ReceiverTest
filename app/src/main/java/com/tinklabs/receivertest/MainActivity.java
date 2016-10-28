@@ -1,13 +1,19 @@
 package com.tinklabs.receivertest;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,9 +30,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                sendInstallAppBroadcast(MainActivity.this, "com.tinklabs.receivertest");
             }
         });
     }
+
+
+    private void sendInstallAppBroadcast(final Context context, final String packageName) {
+        ExecutorService excutor = Executors.newSingleThreadExecutor();
+        excutor.submit(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("HandyDebug", "Send " + packageName + ".APP_INSTALL_FINISHED");
+                Intent weakUpInstalledApplicationIntent = new Intent(packageName + ".APP_INSTALL_FINISHED");
+                weakUpInstalledApplicationIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                context.sendBroadcast(weakUpInstalledApplicationIntent, "com.tinklabs.PERMISSION_RECEIVE_APP_ADDED");
+
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
